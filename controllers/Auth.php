@@ -22,11 +22,15 @@ class JSON_API_Auth_Controller {
 
 		if (!$json_api->query->cookie) {
 
-			$json_api->error("You must include a 'cookie' authentication cookie. Use the `create_auth_cookie` Auth API method.");
+			$json_api->error("You must include a 'cookie' authentication cookie. Use the `create_auth_cookie` Auth API method.", "401 Unauthorized");
 
 		}		
 
     	$valid = wp_validate_auth_cookie($json_api->query->cookie, 'logged_in') ? true : false;
+
+		if ( $valid == false ) {
+			$json_api->error("Access denied", "401 Unauthorized");
+		}
 
 		return array(
 
