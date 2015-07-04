@@ -117,18 +117,22 @@ class JSON_API_Auth_Controller {
 		global $json_api;
 
 		if (!$json_api->query->cookie) {
-			$json_api->error("You must include a 'cookie' var in your request. Use the `generate_auth_cookie` Auth API method.");
+			$json_api->error("You must include a 'cookie' var in your request. Use the `generate_auth_cookie` Auth API method.","401 Unauthorized");
 
 	}
 
 		$user_id = wp_validate_auth_cookie($json_api->query->cookie, 'logged_in');
 
 		if (!$user_id) {
-			$json_api->error("Invalid authentication cookie. Use the `generate_auth_cookie` Auth API method.");
+			$json_api->error("Access denied","401 Unauthorized");
 		}
 
 		$user = get_userdata($user_id);
         preg_match('|src="(.+?)"|', get_avatar( $user->ID, 32 ), $avatar);
+
+		if ( empty( $user->wp_capabilities ) ) {
+			$json_api->error("Access denied","403 Forbidden");
+		}
 
 		return array(
 			"user" => array(
