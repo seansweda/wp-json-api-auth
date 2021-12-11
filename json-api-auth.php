@@ -16,7 +16,7 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 define('JSON_API_AUTH_HOME', dirname(__FILE__));
 
-if (!is_plugin_active('json-api/json-api.php')) {
+if (!is_plugin_active('wp-json-api/json-api.php')) {
 
     add_action('admin_notices', 'pim_auth_draw_notice_json_api');
 
